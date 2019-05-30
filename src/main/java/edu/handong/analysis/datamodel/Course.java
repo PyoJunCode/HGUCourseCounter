@@ -1,6 +1,8 @@
 package edu.handong.analysis.datamodel;
 
 import java.util.ArrayList;
+import org.apache.commons.csv.*;
+import java.util.HashMap;
 
 public class Course {
 	
@@ -14,17 +16,29 @@ public class Course {
 	private int yearTaken;
 	private int semesterCourseTaken;
 	
-	public Course(String line) {
-		this.studentId = line.split(",")[0].trim();
-		this.yearMonthGraduated = line.split(",")[1].trim();
-		this.firstMajor = line.split(",")[2].trim();
-		this.secondMajor = line.split(",")[3].trim();
-		this.courseCode = line.split(",")[4].trim();
-		this.courseName = line.split(",")[5].trim();
-		this.courseCredit = line.split(",")[6].trim();
-		this.yearTaken = Integer.parseInt(line.split(",")[7].trim());
-		this.semesterCourseTaken = Integer.parseInt(line.split(",")[8].trim());
-		
+//	public Course(String line) {
+//		this.studentId = line.split(",")[0].trim();
+//		this.yearMonthGraduated = line.split(",")[1].trim();
+//		this.firstMajor = line.split(",")[2].trim();
+//		this.secondMajor = line.split(",")[3].trim();
+//		this.courseCode = line.split(",")[4].trim();
+//		this.courseName = line.split(",")[5].trim();
+//		this.courseCredit = line.split(",")[6].trim();
+//		this.yearTaken = Integer.parseInt(line.split(",")[7].trim());
+//		this.semesterCourseTaken = Integer.parseInt(line.split(",")[8].trim());
+//		
+//	}
+	
+	public Course(CSVRecord record) {
+		this.studentId = record.get(0);
+		this.yearMonthGraduated = record.get(1);
+		this.firstMajor = record.get(2);
+		this.secondMajor = record.get(3);
+		this.courseCode = record.get(4);
+		this.courseName = record.get(5);
+		this.courseCredit = record.get(6);
+		this.yearTaken = Integer.parseInt(record.get(7).trim());
+		this.semesterCourseTaken = Integer.parseInt(record.get(8).trim());
 	}
 
 	public String getStudentId() {

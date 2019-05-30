@@ -9,7 +9,7 @@ public class Student {
 	private String studentId;
 	private ArrayList<Course> coursesTaken;
 	private HashMap<String, Integer> semestersByYearAndSemester;
-	
+
 	public Student(String studentId) {
 		this.studentId = studentId;
 		this.coursesTaken = new ArrayList<Course>();
@@ -67,6 +67,43 @@ public class Student {
 		return count;
 	}
 	
+	
+	public int isCourseTaken(String courseCode, String check) {
+		
+		int takenStu = 0;
+		String temp;
+		
+		
+		
+		for(Course courseCheck : coursesTaken) {
+			
+			
+			temp = Integer.toString(courseCheck.getYearTaken()) + "-" + Integer.toString(courseCheck.getSemesterCourseTaken());
+			
+			if(courseCode.equals(courseCheck.getCourseCode().trim()) && temp.equals(check.trim()) ) {
+				
+				takenStu ++;
+			
+			}
+		}
+		
+		
+		return takenStu;
+	}
+	
+	public String getKorName(String courseCode) {
 
+		for(Course courseCheck : coursesTaken) {
+			
+			if(courseCheck.getCourseCode().trim().equals(courseCode.trim()))
+				return courseCheck.getCourseName().trim();
+		}
+		return null;
+	}
+	
 	
 }
+	
+
+	
+

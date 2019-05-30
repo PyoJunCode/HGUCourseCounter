@@ -3,6 +3,9 @@ package edu.handong.analysis.utils;
 import java.util.ArrayList;
 import edu.handong.analysis.utils.NotEnoughArgumentException;
 import java.io.*;
+import org.apache.commons.csv.*;
+
+
 public class Utils {
 
 	public static ArrayList<String> getLines(String file, boolean removeHeader){
@@ -19,30 +22,23 @@ public class Utils {
 		
 		try {
 			
-		String line = null;
-		//File rFile = new File(file);
 		
 		
-		FileReader fileReader = new FileReader(file);
+		Reader in = new FileReader(file);
+		Iterable<CSVRecord> records = CSVFormat.EXCEL.withFirstRecordAsHeader().parse(in);
 		
-		BufferedReader rLine = null ;
+		for(CSVRecord record : records) {
+			String studentId = record.get(0);
+			
+			lines.add(studentId);
+			
+			
+			//System.out.println(studentId);
+			
+		}
 		
-		
-			rLine = new BufferedReader(fileReader);
-			
-			if(removeHeader) {
-			rLine.readLine(); //skip first line if true.
-			}
-			
-			while((line = rLine.readLine()) != null) {
-				
-				lines.add(line);
-				
 			
 			
-				}
-			
-			rLine.close();
 			}
 		
 		
@@ -61,7 +57,7 @@ public class Utils {
 		return lines;
 	}
 	
-	public static void writeAFile(ArrayList<String> lines, String targetFileName) {
+public static void writeAFile(ArrayList<String> lines, String targetFileName) {
 		
 		
 		File wFile = new File("./"+targetFileName);
@@ -78,19 +74,58 @@ public class Utils {
 			BufferedWriter bw = new BufferedWriter(new FileWriter(wFile));
 			wFile.createNewFile();
 			
+			CSVPrinter csvPrinter = new CSVPrinter(bw, CSVFormat.DEFAULT.withHeader("StudentID", "TotalNumberOfSemestersRegistered", "Semester", "NumCoursesTakenInTheSemester"));
 			
-			bw.write("StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester");
-			bw.newLine();
 			for(String line : lines) {
-			
-			bw.write(line);
-			bw.newLine();
+				String[] split = line.split(",");
+				csvPrinter.printRecord(split[0],split[1],split[2],split[3]);
 			}
 			
-			bw.close();
+			csvPrinter.flush();
+			csvPrinter.close();
+
 		}
 		
+		//"StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester"
+		 catch (Exception e) {
+			 System.out.println(e.getMessage());
+			 System.exit(0);
+			 
+		 }
 		
+		
+	}
+	
+	public static void writeA2File(ArrayList<String> lines, String targetFileName) {
+		
+		
+		File wFile = new File("./"+targetFileName);
+		wFile.getParentFile().mkdirs();
+		//else if (!wFile.exists()) wFile.createNewFile();
+		
+		
+		try {
+
+			
+		
+			
+			
+			BufferedWriter bw = new BufferedWriter(new FileWriter(wFile));
+			wFile.createNewFile();
+			
+			CSVPrinter csvPrinter = new CSVPrinter(bw, CSVFormat.DEFAULT.withHeader("Year","Semester","CourseCode","CourseName","TotalStudents","StudentsTaken","Rate"));
+			
+			for(String line : lines) {
+				String[] split = line.split(",");
+				csvPrinter.printRecord(split[0],split[1],split[2],split[3],split[4],split[5],split[6]);
+			}
+			
+			csvPrinter.flush();
+			csvPrinter.close();
+
+		}
+		
+		//"StudentID, TotalNumberOfSemestersRegistered, Semester, NumCoursesTakenInTheSemester"
 		 catch (Exception e) {
 			 System.out.println(e.getMessage());
 			 System.exit(0);
